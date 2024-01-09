@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     proxmox = {
-      source = "bpg/proxmox"
+      source  = "bpg/proxmox"
       version = "0.43.0"
     }
   }
@@ -9,7 +9,8 @@ terraform {
 locals {
   container_template_file_insecure = contains(["https"], var.container_template_file) ? false : true
 }
-resource "proxmox_virtual_environment_container" "proxmox_lxc" {
+resource "proxmox_virtual_environment_vm" "proxmox_lxc" {
+  name        = var.container_name
   description = "Managed by Terraform"
   node_name   = var.node_name
   vm_id       = var.vm_id
@@ -34,7 +35,7 @@ resource "proxmox_virtual_environment_container" "proxmox_lxc" {
   }
   disk {
     datastore_id = var.datastore_id
-    size  = var.disk_size
+    size         = var.disk_size
   }
   network_interface {
     name = "veth0"
