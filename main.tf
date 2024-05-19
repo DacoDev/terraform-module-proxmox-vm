@@ -2,14 +2,14 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.43.0"
+      version = "~>0.57.0"
     }
   }
 }
 locals {
   container_template_file_insecure = contains(["https"], var.container_template_file) ? false : true
 }
-resource "proxmox_virtual_environment_vm" "proxmox_lxc" {
+resource "proxmox_virtual_environment_vm" "proxmox_vm" {
   name        = var.container_name
   description = "Managed by Terraform"
   node_name   = var.node_name
@@ -22,7 +22,7 @@ resource "proxmox_virtual_environment_vm" "proxmox_lxc" {
       }
     }
     user_account {
-      password = random_password.lxc_password.result
+      password = random_password.vm_password.result
     }
   }
   cpu {
@@ -30,8 +30,8 @@ resource "proxmox_virtual_environment_vm" "proxmox_lxc" {
     cores        = var.cpu_cores
   }
   memory {
-    dedicated = var.ram_MiB
-    swap      = var.swap_MiB
+    dedicated = var.ram_MB
+    swap      = var.swap_MB
   }
   disk {
     datastore_id = var.datastore_id
@@ -54,7 +54,7 @@ resource "proxmox_virtual_environment_file" "container_template" {
     insecure = local.container_template_file_insecure
   }
 }
-resource "random_password" "lxc_password" {
+resource "random_password" "vm_password" {
   length           = var.password_length
   override_special = "_%@"
   special          = true

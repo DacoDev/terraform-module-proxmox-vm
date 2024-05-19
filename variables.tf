@@ -33,23 +33,23 @@ variable "disk_size" {
   default = 4
   validation {
     condition     = can(regex("[0-9]+", var.disk_size))
-    error_message = "Set the size of the LXC disk in GB"
+    error_message = "Set the size of the VM root disk in GB"
   }
 }
-variable "ram_MiB" {
-  description = "Amount of RAM to provision for each container, in MebiBytes."
+variable "ram_MB" {
+  description = "Amount of RAM to provision for each container, in megabytes."
   type        = number
   validation {
-    condition     = can(regex("[0-9]+", var.ram_MiB))
+    condition     = can(regex("[0-9]+", var.ram_MB))
     error_message = "Numbers only, no limit currently but maybe it won't work."
   }
 }
-variable "swap_MiB" {
+variable "swap_MB" {
   description = "By setting this value, you grant access for the container to use the host node SWAP space, 0 by default."
   type        = number
   default     = 0
   validation {
-    condition     = can(regex("[0-9]+", var.swap_MiB))
+    condition     = can(regex("[0-9]+", var.swap_MB))
     error_message = "Numbers only, no limit currently but maybe it won't work."
   }
 }
